@@ -4,13 +4,17 @@ import "./index.css";
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [cards, setCards] = useState([]);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
   const searchCards = async () => {
-    if (!searchQuery) return;
+    if (!searchQuery) {
+      setFeedbackMessage("");
+      return;
+    }
 
     try {
       const response = await fetch(
@@ -19,10 +23,19 @@ function App() {
         )}`
       );
       const data = await response.json();
-      setCards(data.data);
+      if (data.data && data.data.length > 0) {
+        setCards(data.data);
+        setFeedbackMessage("");
+      } else {
+        setCards([]);
+        setFeedbackMessage(
+          "No cards found matching your search. Please check the spelling or try a different name."
+        );
+      }
     } catch (error) {
       console.error("Error fetching cards:", error);
       setCards([]);
+      setFeedbackMessage("Failed to fetch cards. Please try again.");
     }
   };
 
@@ -46,11 +59,13 @@ function App() {
       }
     }
     setCards(fetchedCards);
+    setFeedbackMessage("");
   };
 
   const resetApp = () => {
     setSearchQuery("");
     fetchRandomCards();
+    setFeedbackMessage("");
   };
 
   useEffect(() => {
@@ -80,6 +95,7 @@ function App() {
           Search
         </button>
       </div>
+      {feedbackMessage && <div className="m-4">{feedbackMessage}</div>}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {cards.map((card, index) => (
           <div key={index} className="bg-base-100">
