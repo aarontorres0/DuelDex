@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./index.css";
 
 function App() {
+  const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [cards, setCards] = useState([]);
   const [feedbackMessage, setFeedbackMessage] = useState("");
@@ -46,6 +47,7 @@ function App() {
   };
 
   const fetchRandomCards = async () => {
+    setIsLoading(true);
     let fetchedCards = [];
     for (let i = 0; i < 8; i++) {
       try {
@@ -60,6 +62,7 @@ function App() {
     }
     setCards(fetchedCards);
     setFeedbackMessage("");
+    setIsLoading(false);
   };
 
   const resetApp = () => {
@@ -96,19 +99,26 @@ function App() {
         </button>
       </div>
       {feedbackMessage && <div className="m-4">{feedbackMessage}</div>}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        {cards.map((card, index) => (
-          <div key={index} className="bg-base-100">
-            <figure className="bg-white">
-              <img
-                src={card.card_images[0].image_url}
-                alt={card.name}
-                className="w-full"
-              />
-            </figure>
-          </div>
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="flex justify-center items-center">
+          <div className="loader"></div>
+          <p>Loading cards...</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          {cards.map((card, index) => (
+            <div key={index} className="bg-base-100">
+              <figure className="bg-white">
+                <img
+                  src={card.card_images[0].image_url}
+                  alt={card.name}
+                  className="w-full"
+                />
+              </figure>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
