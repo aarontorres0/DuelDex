@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import CardDetails from "./CardDetails";
 import "./index.css";
 
 function App() {
@@ -6,6 +7,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [cards, setCards] = useState([]);
   const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [selectedCard, setSelectedCard] = useState(null);
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -107,7 +109,11 @@ function App() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {cards.map((card, index) => (
-            <div key={index} className="bg-base-100">
+            <div
+              key={index}
+              className="bg-base-100"
+              onClick={() => setSelectedCard(card)}
+            >
               <figure className="bg-white">
                 <img
                   src={card.card_images[0].image_url}
@@ -118,6 +124,13 @@ function App() {
             </div>
           ))}
         </div>
+      )}
+
+      {selectedCard && (
+        <CardDetails
+          card={selectedCard}
+          onClose={() => setSelectedCard(null)}
+        />
       )}
     </div>
   );
