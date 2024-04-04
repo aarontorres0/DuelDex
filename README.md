@@ -1,12 +1,16 @@
 # DuelDex
 
-DuelDex is designed to help duelists discover new cards to build stronger decks.
+DuelDex is designed to help duelists discover new cards and build stronger decks.
+
+<div align="center">
+  <img src="imgs/search.png" alt="DuelDex App Screenshot" width="700">
+</div>
 
 ## Technologies Used
 
 - **Frontend:** React.js with Vite
 - **Styling:** Tailwind CSS and DaisyUI
-- **API:** YGOPRODeck API for fetching comprehensive Yu-Gi-Oh! card data
+- **API:** YGOPRODeck API for fetching Yu-Gi-Oh! card data
 
 ## Acknowledgments
 
