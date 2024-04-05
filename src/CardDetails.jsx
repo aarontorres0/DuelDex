@@ -17,9 +17,16 @@ function CardDetails({ card, onClose }) {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
 
+  const handleModalContentClick = (e) => {
+    e.stopPropagation();
+  };
+
   return (
-    <div className="modal modal-open">
-      <div className="modal-box w-11/12 max-w-4xl">
+    <div className="modal modal-open" onClick={onClose}>
+      <div
+        className="modal-box w-11/12 max-w-4xl"
+        onClick={handleModalContentClick}
+      >
         <div className="flex">
           <figure className="flex-none w-1/2 px-5 pt-5">
             <img

@@ -4,7 +4,7 @@
 
 DuelDex is designed to help duelists discover new cards and build stronger decks.
 
-## Page Previews
+## Previews
 
 ### Search
 
