@@ -1,5 +1,7 @@
 # DuelDex
 
+[![Build and Deploy](https://github.com/aarontorres0/DuelDex/actions/workflows/deploy.yml/badge.svg)](https://github.com/aarontorres0/DuelDex/actions/workflows/deploy.yml)
+
 DuelDex is designed to help duelists discover new cards and build stronger decks.
 
 <div align="center">

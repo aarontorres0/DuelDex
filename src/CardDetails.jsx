@@ -42,17 +42,17 @@ function CardDetails({ card, onClose }) {
                 <strong>Race:</strong> {card.race}
               </p>
             )}
-            {card.level && (
+            {typeof card.level !== "undefined" && (
               <p className="py-2">
                 <strong>Level:</strong> {card.level}
               </p>
             )}
-            {card.atk && (
+            {typeof card.atk !== "undefined" && (
               <p className="py-2">
                 <strong>Attack:</strong> {card.atk}
               </p>
             )}
-            {card.def && (
+            {typeof card.def !== "undefined" && (
               <p className="py-2">
                 <strong>Defense:</strong> {card.def}
               </p>
