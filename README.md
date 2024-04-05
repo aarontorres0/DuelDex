@@ -4,8 +4,18 @@
 
 DuelDex is designed to help duelists discover new cards and build stronger decks.
 
+## Page Previews
+
+### Search
+
 <div align="center">
-  <img src="imgs/search.png" alt="DuelDex App Screenshot" width="700">
+  <img src="imgs/search_results.png" alt="DuelDex App Screenshot" width="700">
+</div>
+
+### Card Details
+
+<div align="center">
+  <img src="imgs/card_details.png" alt="Card anatomy shown for selected monster" width="700">
 </div>
 
 ## Technologies Used
