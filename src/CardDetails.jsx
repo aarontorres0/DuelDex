@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 
 function CardDetails({ card, onClose }) {
+  const descriptionLines = card.desc
+    ? card.desc.split("●").filter((line) => line.trim() !== "")
+    : [];
+
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -63,9 +67,12 @@ function CardDetails({ card, onClose }) {
               </p>
             )}
             {card.desc && (
-              <p className="py-2">
-                <strong>Description:</strong> {card.desc}
-              </p>
+              <div className="py-2">
+                <strong>Description:</strong>
+                {descriptionLines.map((line, index) => (
+                  <p key={index}>{index > 0 ? "● " + line : line}</p>
+                ))}
+              </div>
             )}
           </div>
         </div>

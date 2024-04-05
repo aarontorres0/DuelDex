@@ -111,7 +111,7 @@ function App() {
           {cards.map((card, index) => (
             <div
               key={index}
-              className="bg-base-100"
+              className="bg-base-100 cursor-pointer"
               onClick={() => setSelectedCard(card)}
             >
               <figure className="bg-white">
