@@ -2,7 +2,7 @@
 
 [![Build and Deploy](https://github.com/aarontorres0/DuelDex/actions/workflows/deploy.yml/badge.svg)](https://github.com/aarontorres0/DuelDex/actions/workflows/deploy.yml)
 
-DuelDex is designed to help duelists discover new cards and build stronger decks.
+[DuelDex](https://aarontorres0.github.io/DuelDex/) is designed to help duelists discover new cards and build stronger decks.
 
 ## Previews
 
@@ -22,7 +22,7 @@ DuelDex is designed to help duelists discover new cards and build stronger decks
 
 - **Frontend:** React.js with Vite
 - **Styling:** Tailwind CSS and DaisyUI
-- **API:** YGOPRODeck API for fetching Yu-Gi-Oh! card data
+- **API:** YGOPRODeck API
 
 ## Acknowledgments
 
