@@ -27,8 +27,8 @@ function CardDetails({ card, onClose }) {
         className="modal-box w-11/12 max-w-4xl"
         onClick={handleModalContentClick}
       >
-        <div className="flex">
-          <figure className="flex-none w-1/2 px-5 pt-5">
+        <div className="flex flex-col md:flex-row">
+          <figure className="md:flex-none w-full md:w-1/2 px-5 pt-5">
             <img
               src={card.card_images[0].image_url}
               alt={card.name}
