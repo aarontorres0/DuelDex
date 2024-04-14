@@ -13,7 +13,7 @@ function AppRouter() {
   const [showSignup, setShowSignup] = useState(false);
 
   return (
-    <Router>
+    <Router basename={process.env.NODE_ENV === "production" ? "/DuelDex" : "/"}>
       <div className="flex justify-between items-center container mx-auto px-4 py-2">
         <Link to="/" className="text-2xl font-bold cursor-pointer">
           DuelDex
