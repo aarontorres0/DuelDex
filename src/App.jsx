@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../AuthContext";
 import CardDetails from "./CardDetails";
-import Login from "./Login";
-import Signup from "./Signup";
 import "./index.css";
-import { supabase } from "./supabaseClient";
 
 function App() {
-  const { user, setUser } = useAuth();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignup, setShowSignup] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [cards, setCards] = useState([]);
   const [feedbackMessage, setFeedbackMessage] = useState("");
@@ -58,7 +53,7 @@ function App() {
   const fetchRandomCards = async () => {
     setIsLoading(true);
     let fetchedCards = [];
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 8; i++) {
       try {
         const response = await fetch(
           "https://db.ygoprodeck.com/api/v7/randomcard.php"
@@ -74,55 +69,12 @@ function App() {
     setIsLoading(false);
   };
 
-  const resetApp = () => {
-    setSearchQuery("");
-    fetchRandomCards();
-    setFeedbackMessage("");
-  };
-
   useEffect(() => {
     fetchRandomCards();
   }, []);
 
   return (
     <div className="container mx-auto px-4 py-2">
-      <div className="flex justify-between items-center my-4">
-        <h1 className="text-2xl font-bold cursor-pointer" onClick={resetApp}>
-          DuelDex
-        </h1>
-        <div>
-          {user ? (
-            <button
-              onClick={() => {
-                supabase.auth.signOut();
-                setUser(null);
-              }}
-              className="btn btn-error text-white"
-            >
-              Logout
-            </button>
-          ) : (
-            <>
-              <button
-                onClick={() => setShowLogin(true)}
-                className="btn btn-success text-white"
-              >
-                Login
-              </button>
-              <button
-                onClick={() => setShowSignup(true)}
-                className="btn btn-info text-white ml-2"
-              >
-                Sign Up
-              </button>
-            </>
-          )}
-        </div>
-      </div>
-      {showLogin && (
-        <Login setUser={setUser} onClose={() => setShowLogin(false)} />
-      )}
-      {showSignup && <Signup onClose={() => setShowSignup(false)} />}
       <div className="flex justify-center my-4">
         <input
           type="search"
@@ -166,6 +118,7 @@ function App() {
         <CardDetails
           card={selectedCard}
           onClose={() => setSelectedCard(null)}
+          user={user}
         />
       )}
     </div>

@@ -1,24 +1,60 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { supabase } from "./supabaseClient";
 
-function CardDetails({ card, onClose }) {
+function CardDetails({ card, onClose, user }) {
+  const [isBookmarked, setIsBookmarked] = useState(false);
   const descriptionLines = card.desc
     ? card.desc.split("●").filter((line) => line.trim() !== "")
     : [];
 
   useEffect(() => {
+    checkBookmarkStatus();
+
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
         onClose();
       }
     };
-
     document.addEventListener("keydown", handleKeyDown);
-
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [onClose]);
+  }, [card.id]);
 
-  const handleModalContentClick = (e) => {
-    e.stopPropagation();
+  const handleModalContentClick = (e) => e.stopPropagation();
+
+  const checkBookmarkStatus = async () => {
+    if (!user) return;
+
+    const { data, error } = await supabase
+      .from("bookmarks")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("card_id", card.id);
+    setIsBookmarked(data.length > 0);
+  };
+
+  const toggleBookmark = async () => {
+    if (!user) return;
+
+    if (isBookmarked) {
+      const { error } = await supabase
+        .from("bookmarks")
+        .delete()
+        .match({ user_id: user.id, card_id: card.id });
+      if (!error) {
+        setIsBookmarked(false);
+      } else {
+        console.error("Error removing bookmark:", error);
+      }
+    } else {
+      const { error } = await supabase
+        .from("bookmarks")
+        .insert([{ user_id: user.id, card_id: card.id }]);
+      if (!error) {
+        setIsBookmarked(true);
+      } else {
+        console.error("Error adding bookmark:", error);
+      }
+    }
   };
 
   return (
@@ -85,6 +121,19 @@ function CardDetails({ card, onClose }) {
         </div>
 
         <div className="modal-action">
+          {user && (
+            <>
+              <button
+                className={`btn ${
+                  isBookmarked ? "btn-error text-white" : "btn-primary"
+                }`}
+                onClick={toggleBookmark}
+              >
+                {isBookmarked ? "Remove Bookmark" : "Bookmark"}
+              </button>
+
+            </>
+          )}
           <button className="btn btn-error text-white" onClick={onClose}>
             Close
           </button>
