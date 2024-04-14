@@ -5,22 +5,33 @@ function Signup({ onClose }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [signupError, setSignupError] = useState("");
+  const [signupSuccess, setSignupSuccess] = useState("");
 
   const handleSignup = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setSignupError("");
+    setSignupSuccess("");
     try {
-      const { user, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email: email,
         password: password,
       });
       if (error) throw error;
       else {
-        alert("Signup successful! Check your email for the confirmation link.");
-        onClose();
+        setSignupSuccess(
+          "Signup successful! Check your email for the confirmation link."
+        );
+        setEmail("");
+        setPassword("");
+        setTimeout(() => {
+          onClose();
+        }, 5000);
       }
     } catch (error) {
-      alert("Error signing up:", error.error_description || error.message);
+      setSignupError("Signup failed: " + error.message);
+      setPassword("");
     } finally {
       setLoading(false);
     }
@@ -53,13 +64,17 @@ function Signup({ onClose }) {
             required
             className="input input-bordered w-full"
           />
+          {signupError && <p className="text-red-500 my-4">{signupError}</p>}
+          {signupSuccess && (
+            <p className="text-green-500 my-4">{signupSuccess}</p>
+          )}
           <div className="modal-action">
             <button
               type="submit"
-              disabled={loading}
-              className="btn btn-primary"
+              disabled={!email || !password || loading}
+              className={`btn ${loading ? "loading" : "btn-primary"}`}
             >
-              {loading ? "Loading..." : "Sign Up"}
+              Sign Up
             </button>
             <button onClick={onClose} className="btn btn-ghost">
               Close
