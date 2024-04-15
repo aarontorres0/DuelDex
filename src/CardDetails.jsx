@@ -125,13 +125,14 @@ function CardDetails({ card, onClose, user }) {
             <>
               <button
                 className={`btn ${
-                  isBookmarked ? "btn-error text-white" : "btn-primary"
+                  isBookmarked
+                    ? "btn-outline btn-primary text-white"
+                    : "btn-primary"
                 }`}
                 onClick={toggleBookmark}
               >
                 {isBookmarked ? "Remove Bookmark" : "Bookmark"}
               </button>
-
             </>
           )}
           <button className="btn btn-error text-white" onClick={onClose}>

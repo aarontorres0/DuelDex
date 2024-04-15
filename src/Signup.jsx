@@ -23,6 +23,13 @@ function Signup({ onClose }) {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    if (!isValidPassword(password)) {
+      setSignupError(
+        "Password must be at least 16 characters and include at least one lowercase, one uppercase, one number, and one special character."
+      );
+      return;
+    }
+
     setLoading(true);
     setSignupError("");
     setSignupSuccess("");
@@ -38,9 +45,7 @@ function Signup({ onClose }) {
         );
         setEmail("");
         setPassword("");
-        setTimeout(() => {
-          onClose();
-        }, 5000);
+        setTimeout(onClose, 5000);
       }
     } catch (error) {
       setSignupError("Signup failed: " + error.message);
@@ -48,6 +53,16 @@ function Signup({ onClose }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const isValidPassword = (password) => {
+    return (
+      password.length >= 16 &&
+      /[a-z]/.test(password) &&
+      /[A-Z]/.test(password) &&
+      /[0-9]/.test(password) &&
+      /[^a-zA-Z0-9]/.test(password)
+    );
   };
 
   return (
@@ -77,6 +92,11 @@ function Signup({ onClose }) {
             required
             className="input input-bordered w-full"
           />
+          <div className="text-xs text-gray-500 mt-1">
+            Password must be at least 16 characters long and include at least
+            one uppercase letter, one lowercase letter, one number, and one of
+            the following special characters: !@#$%^&*()_+-=[]{};\'\:"|?,./`~
+          </div>
           {signupError && <p className="text-red-500 my-4">{signupError}</p>}
           {signupSuccess && (
             <p className="text-green-500 my-4">{signupSuccess}</p>
