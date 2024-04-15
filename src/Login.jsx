@@ -1,10 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
 
 function Login({ setUser, onClose }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  const handleModalContentClick = (e) => e.stopPropagation();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -26,8 +39,8 @@ function Login({ setUser, onClose }) {
   };
 
   return (
-    <div className="modal modal-open">
-      <div className="modal-box">
+    <div className="modal modal-open" onClick={onClose}>
+      <div className="modal-box" onClick={handleModalContentClick}>
         <h3 className="font-bold text-lg">Login</h3>
         <form onSubmit={handleLogin}>
           <label className="label">
@@ -56,12 +69,12 @@ function Login({ setUser, onClose }) {
           <div className="modal-action">
             <button
               type="submit"
-              className="btn btn-primary"
+              className="btn btn-success text-white"
               disabled={!email || !password}
             >
               Login
             </button>
-            <button onClick={onClose} className="btn btn-ghost">
+            <button onClick={onClose} className="btn btn-error text-white">
               Close
             </button>
           </div>
