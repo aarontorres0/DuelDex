@@ -21,3 +21,16 @@
     transform: rotate(360deg);
   }
 }
+
+.hamburger {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.hamburger div {
+  width: 25px;
+  height: 3px;
+  background-color: black;
+  margin: 5px 0;
+  transition: 0.4s;
+}

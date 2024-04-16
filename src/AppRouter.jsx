@@ -7,6 +7,7 @@ import Deck from "./Deck";
 import Login from "./Login";
 import LogoutButton from "./LogoutButton";
 import Signup from "./Signup";
+import "./index.css";
 
 function AppRouter() {
   const { user, setUser } = useAuth();
@@ -35,12 +36,23 @@ function AppRouter() {
             onClick={() => setShowMenu(!showMenu)}
             className="btn md:hidden"
           >
-            Menu
+            <div className="hamburger">
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
           </button>
           {showMenu && (
             <div className="absolute right-0 w-40 mt-2 shadow-lg bg-white rounded-md z-10">
               {user ? (
                 <>
+                  <Link
+                    to="/"
+                    className="block px-4 py-2 text-sm text-success-700 hover:bg-gray-100"
+                    onClick={() => setShowMenu(false)}
+                  >
+                    Home
+                  </Link>
                   <Link
                     to="/bookmarks"
                     className="block px-4 py-2 text-sm text-success-700 hover:bg-gray-100"
