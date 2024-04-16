@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
 
-function CardDetails({ card, onClose, user }) {
+function CardDetails({ card, onClose, user, onRemoveBookmark }) {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const descriptionLines = card.desc
     ? card.desc.split("●").filter((line) => line.trim() !== "")
@@ -42,6 +42,7 @@ function CardDetails({ card, onClose, user }) {
         .match({ user_id: user.id, card_id: card.id });
       if (!error) {
         setIsBookmarked(false);
+        onRemoveBookmark(card.id);
       } else {
         console.error("Error removing bookmark:", error);
       }

@@ -40,6 +40,10 @@ function Bookmarks() {
       .catch((error) => console.error("Failed to fetch card details:", error));
   };
 
+  const handleRemoveBookmark = (cardId) => {
+    setCards(cards.filter((card) => card.id !== cardId));
+  };
+
   return (
     <div className="container mx-auto px-4 py-2">
       {cards.length > 0 ? (
@@ -68,6 +72,7 @@ function Bookmarks() {
           card={selectedCard}
           onClose={() => setSelectedCard(null)}
           user={user}
+          onRemoveBookmark={handleRemoveBookmark}
         />
       )}
     </div>
