@@ -14,6 +14,16 @@ function AppRouter() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
 
+  const switchToSignup = () => {
+    setShowLogin(false);
+    setShowSignup(true);
+  };
+
+  const switchToLogin = () => {
+    setShowSignup(false);
+    setShowLogin(true);
+  };
+
   return (
     <Router basename={process.env.NODE_ENV === "production" ? "/DuelDex" : "/"}>
       <div className="container mx-auto px-4 py-2 flex justify-between items-center">
@@ -104,9 +114,18 @@ function AppRouter() {
         </div>
       </div>
       {showLogin && (
-        <Login setUser={setUser} onClose={() => setShowLogin(false)} />
+        <Login
+          setUser={setUser}
+          onClose={() => setShowLogin(false)}
+          onSwitchToSignup={switchToSignup}
+        />
       )}
-      {showSignup && <Signup onClose={() => setShowSignup(false)} />}
+      {showSignup && (
+        <Signup
+          onClose={() => setShowSignup(false)}
+          onSwitchToLogin={switchToLogin}
+        />
+      )}
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/bookmarks" element={<Bookmarks />} />

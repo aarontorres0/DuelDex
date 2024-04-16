@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
 
-function Login({ setUser, onClose }) {
+function Login({ setUser, onClose, onSwitchToSignup }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
@@ -65,6 +65,12 @@ function Login({ setUser, onClose }) {
             className="input input-bordered w-full"
             required
           />
+          <p className="my-4">
+            Don't have an account?{" "}
+            <span className="link" onClick={onSwitchToSignup}>
+              Sign Up
+            </span>
+          </p>
           {loginError && <p className="text-red-500 my-4">{loginError}</p>}
           <div className="modal-action">
             <button
@@ -74,7 +80,7 @@ function Login({ setUser, onClose }) {
             >
               Login
             </button>
-            <button onClick={onClose} className="btn btn-error text-white">
+            <button className="btn btn-error text-white" onClick={onClose}>
               Close
             </button>
           </div>
