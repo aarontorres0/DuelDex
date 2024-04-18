@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
 
-function CardDetails({ card, onClose, onRemoveBookmark, onRemoveCard, user }) {
+function CardDetails({
+  card,
+  onClose,
+  onAddBookmark,
+  onRemoveBookmark,
+  onAddCard,
+  onRemoveCard,
+  user,
+}) {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isInDeck, setIsInDeck] = useState(false);
 
@@ -55,6 +63,7 @@ function CardDetails({ card, onClose, onRemoveBookmark, onRemoveCard, user }) {
         .insert([{ user_id: user.id, card_id: card.id }]);
       if (!error) {
         setIsBookmarked(true);
+        onAddBookmark(card);
       } else {
         console.error("Error adding bookmark:", error);
       }
@@ -92,6 +101,7 @@ function CardDetails({ card, onClose, onRemoveBookmark, onRemoveCard, user }) {
         .insert([{ user_id: user.id, card_id: card.id }]);
       if (!error) {
         setIsInDeck(true);
+        onAddCard(card);
       } else {
         console.error("Error adding card to deck:", error);
       }

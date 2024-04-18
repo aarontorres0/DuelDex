@@ -50,6 +50,10 @@ function Bookmarks() {
     setCards(cards.filter((card) => card.id !== cardId));
   };
 
+  const handleAddBookmark = (newCard) => {
+    setCards((prevCards) => [...prevCards, newCard]);
+  };
+
   return (
     <div className="container mx-auto px-4 py-2">
       {isLoading ? (
@@ -83,6 +87,7 @@ function Bookmarks() {
           onClose={() => setSelectedCard(null)}
           user={user}
           onRemoveBookmark={handleRemoveBookmark}
+          onAddBookmark={handleAddBookmark}
         />
       )}
     </div>

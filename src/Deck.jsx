@@ -48,6 +48,10 @@ function Deck() {
     setCards(cards.filter((card) => card.id !== cardId));
   };
 
+  const handleAddCard = (newCard) => {
+    setCards((prevCards) => [...prevCards, newCard]);
+  };
+
   return (
     <div className="container mx-auto px-4 py-2">
       {isLoading ? (
@@ -83,6 +87,7 @@ function Deck() {
           onClose={() => setSelectedCard(null)}
           user={user}
           onRemoveCard={handleRemoveCard}
+          onAddCard={handleAddCard}
         />
       )}
     </div>
