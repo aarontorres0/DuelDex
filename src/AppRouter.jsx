@@ -25,6 +25,10 @@ function AppRouter() {
     setShowLogin(true);
   };
 
+  const closeMenu = () => {
+    setShowMenu(false);
+  };
+
   return (
     <Router basename={process.env.NODE_ENV === "production" ? "/DuelDex" : "/"}>
       <div className="container mx-auto px-4 py-2 flex justify-between items-center">
@@ -68,7 +72,7 @@ function AppRouter() {
                     Deck
                   </Link>
                   <div className="px-4 py-2">
-                    <LogoutButton />
+                    <LogoutButton closeMenu={closeMenu} />
                   </div>
                 </>
               ) : (

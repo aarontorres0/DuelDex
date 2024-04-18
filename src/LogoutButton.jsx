@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { supabase } from "./supabaseClient";
 
-const LogoutButton = () => {
+const LogoutButton = ({ closeMenu }) => {
   const navigate = useNavigate();
   const { setUser } = useAuth();
 
@@ -11,6 +11,9 @@ const LogoutButton = () => {
     await supabase.auth.signOut();
     setUser(null);
     navigate("/");
+    if (closeMenu) {
+      closeMenu();
+    }
   };
 
   return (
