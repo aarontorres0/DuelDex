@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
 
-function CardDetails({
+const CardDetails = ({
   card,
   onClose,
   onAddBookmark,
@@ -9,7 +9,7 @@ function CardDetails({
   onAddCard,
   onRemoveCard,
   user,
-}) {
+}) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isInDeck, setIsInDeck] = useState(false);
 
@@ -29,8 +29,6 @@ function CardDetails({
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [card.id]);
-
-  const handleModalContentClick = (e) => e.stopPropagation();
 
   const checkBookmarkStatus = async () => {
     if (!user) return;
@@ -53,7 +51,9 @@ function CardDetails({
         .match({ user_id: user.id, card_id: card.id });
       if (!error) {
         setIsBookmarked(false);
-        onRemoveBookmark(card.id);
+        if (onRemoveBookmark) {
+          onRemoveBookmark(card.id);
+        }
       } else {
         console.error("Error removing bookmark:", error);
       }
@@ -63,7 +63,9 @@ function CardDetails({
         .insert([{ user_id: user.id, card_id: card.id }]);
       if (!error) {
         setIsBookmarked(true);
-        onAddBookmark(card);
+        if (onAddBookmark) {
+          onAddBookmark(card);
+        }
       } else {
         console.error("Error adding bookmark:", error);
       }
@@ -91,7 +93,9 @@ function CardDetails({
         .match({ user_id: user.id, card_id: card.id });
       if (!error) {
         setIsInDeck(false);
-        onRemoveCard(card.id);
+        if (onRemoveCard) {
+          onRemoveCard(card.id);
+        }
       } else {
         console.error("Error removing card from deck:", error);
       }
@@ -101,7 +105,9 @@ function CardDetails({
         .insert([{ user_id: user.id, card_id: card.id }]);
       if (!error) {
         setIsInDeck(true);
-        onAddCard(card);
+        if (onAddCard) {
+          onAddCard(card);
+        }
       } else {
         console.error("Error adding card to deck:", error);
       }
@@ -112,7 +118,7 @@ function CardDetails({
     <div className="modal modal-open" onClick={onClose}>
       <div
         className="modal-box w-11/12 max-w-4xl"
-        onClick={handleModalContentClick}
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-col md:flex-row">
           <figure className="md:flex-none w-full md:w-1/2 px-5 pt-5">
@@ -201,6 +207,6 @@ function CardDetails({
       </div>
     </div>
   );
-}
+};
 
 export default CardDetails;
