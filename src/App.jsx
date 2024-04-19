@@ -3,12 +3,13 @@ import { useAuth } from "../AuthContext";
 import CardDetails from "./CardDetails";
 import "./index.css";
 
-function App() {
+const App = () => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [cards, setCards] = useState([]);
   const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [searchFeedback, setSearchFeedback] = useState("");
   const [selectedCard, setSelectedCard] = useState(null);
 
   const handleSearchChange = (e) => {
@@ -31,8 +32,14 @@ function App() {
       if (data.data && data.data.length > 0) {
         setCards(data.data);
         setFeedbackMessage("");
+        if (data.data.length === 1) {
+          setSearchFeedback(`Found ${data.data.length} card`);
+        } else {
+          setSearchFeedback(`Found ${data.data.length} cards`);
+        }
       } else {
         setCards([]);
+        setSearchFeedback("");
         setFeedbackMessage(
           "No cards found matching your search. Please check the spelling or try a different name."
         );
@@ -88,7 +95,12 @@ function App() {
           Search
         </button>
       </div>
-      {feedbackMessage && <div className="m-4">{feedbackMessage}</div>}
+      {searchFeedback && (
+        <p className="text-center text-xs text-gray-500 m-4">
+          {searchFeedback}
+        </p>
+      )}
+      {feedbackMessage && <div className="text-center m-4">{feedbackMessage}</div>}
       {isLoading ? (
         <div className="flex justify-center items-center">
           <div className="loader"></div>
@@ -123,6 +135,6 @@ function App() {
       )}
     </div>
   );
-}
+};
 
 export default App;

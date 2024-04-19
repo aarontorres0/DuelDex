@@ -11,6 +11,7 @@ const Bookmarks = () => {
   const [searchText, setSearchText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
+  const [searchFeedback, setSearchFeedback] = useState("");
 
   useEffect(() => {
     fetchBookmarkedCards();
@@ -25,6 +26,15 @@ const Bookmarks = () => {
       card.name.toLowerCase().includes(searchText.toLowerCase())
     );
     setFilteredCards(filtered);
+    if (searchText && filtered.length > 0) {
+      if (filtered.length === 1) {
+        setSearchFeedback(`Found 1 result`);
+      } else {
+        setSearchFeedback(`Found ${filtered.length} results`);
+      }
+    } else {
+      setSearchFeedback("");
+    }
   };
 
   const handleSearchTextChange = (text) => {
@@ -69,11 +79,13 @@ const Bookmarks = () => {
   const handleRemoveBookmark = (cardId) => {
     const updatedCards = cards.filter((card) => card.id !== cardId);
     setCards(updatedCards);
+    applySearch();
   };
 
   const handleAddBookmark = (newCard) => {
     const updatedCards = [...cards, newCard];
     setCards(updatedCards);
+    applySearch();
   };
 
   return (
@@ -83,6 +95,11 @@ const Bookmarks = () => {
         onSearchTextChange={handleSearchTextChange}
         placeholder="Search bookmarked cards"
       />
+      {searchFeedback && (
+        <p className="text-center text-xs text-gray-500 m-4">
+          {searchFeedback}
+        </p>
+      )}
       {isLoading ? (
         <div className="flex justify-center items-center">
           <div className="loader"></div>

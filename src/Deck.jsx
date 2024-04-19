@@ -11,6 +11,7 @@ const Deck = () => {
   const [searchText, setSearchText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
+  const [searchFeedback, setSearchFeedback] = useState("");
 
   useEffect(() => {
     fetchDeckCards();
@@ -25,6 +26,15 @@ const Deck = () => {
       card.name.toLowerCase().includes(searchText.toLowerCase())
     );
     setFilteredCards(filtered);
+    if (searchText && filtered.length > 0) {
+      if (filtered.length === 1) {
+        setSearchFeedback(`Found 1 result`);
+      } else {
+        setSearchFeedback(`Found ${filtered.length} results`);
+      }
+    } else {
+      setSearchFeedback("");
+    }
   };
 
   const handleSearchTextChange = (text) => {
@@ -67,11 +77,13 @@ const Deck = () => {
   const handleRemoveCard = (cardId) => {
     const updatedCards = cards.filter((card) => card.id !== cardId);
     setCards(updatedCards);
+    applySearch();
   };
 
   const handleAddCard = (newCard) => {
     const updatedCards = [...cards, newCard];
     setCards(updatedCards);
+    applySearch();
   };
 
   return (
@@ -81,6 +93,11 @@ const Deck = () => {
         onSearchTextChange={handleSearchTextChange}
         placeholder="Search cards in deck"
       />
+      {searchFeedback && (
+        <p className="text-center text-xs text-gray-500 m-4">
+          {searchFeedback}
+        </p>
+      )}
       {isLoading ? (
         <div className="flex justify-center items-center">
           <div className="loader"></div>
@@ -106,7 +123,7 @@ const Deck = () => {
       ) : (
         <p className="text-center">
           {cards.length
-            ? "No cards in deck match your search."
+            ? "No cards in your deck match your search."
             : "You do not have any cards in your deck."}
         </p>
       )}
