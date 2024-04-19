@@ -1,17 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../AuthContext";
 import CardDetails from "./CardDetails";
+import CardSearch from "./CardSearch";
 import { supabase } from "./supabaseClient";
 
 function Bookmarks() {
   const { user } = useAuth();
   const [cards, setCards] = useState([]);
+  const [filteredCards, setFilteredCards] = useState([]);
+  const [searchText, setSearchText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
 
   useEffect(() => {
     fetchBookmarkedCards();
   }, [user]);
+
+  useEffect(() => {
+    applySearch();
+  }, [cards, searchText]);
+
+  const applySearch = () => {
+    const filtered = cards.filter((card) =>
+      card.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setFilteredCards(filtered);
+  };
+
+  const handleSearchTextChange = (text) => {
+    setSearchText(text);
+    applySearch();
+  };
 
   const fetchBookmarkedCards = async () => {
     if (!user) return;
@@ -39,6 +58,7 @@ function Bookmarks() {
     Promise.all(cardPromises)
       .then((fetchedCards) => {
         setCards(fetchedCards.filter((card) => card));
+        setFilteredCards(fetchedCards.filter((card) => card));
       })
       .catch((error) => {
         console.error("Failed to fetch card details:", error);
@@ -47,22 +67,28 @@ function Bookmarks() {
   };
 
   const handleRemoveBookmark = (cardId) => {
-    setCards(cards.filter((card) => card.id !== cardId));
+    const updatedCards = cards.filter((card) => card.id !== cardId);
+    setCards(updatedCards);
   };
 
   const handleAddBookmark = (newCard) => {
-    setCards((prevCards) => [...prevCards, newCard]);
+    const updatedCards = [...cards, newCard];
+    setCards(updatedCards);
   };
 
   return (
     <div className="container mx-auto px-4 py-2">
+      <CardSearch
+        searchText={searchText}
+        onSearchTextChange={handleSearchTextChange}
+      />
       {isLoading ? (
         <div className="flex justify-center items-center">
           <div className="loader"></div>
         </div>
-      ) : cards.length > 0 ? (
+      ) : filteredCards.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          {cards.map((card, index) => (
+          {filteredCards.map((card, index) => (
             <div
               key={index}
               className="bg-base-100 cursor-pointer"
@@ -79,7 +105,10 @@ function Bookmarks() {
           ))}
         </div>
       ) : (
-        <p className="text-center">There are no bookmarked cards currently.</p>
+        <p className="text-center">
+          No bookmarked cards match your search or you do not have any
+          bookmarked cards.
+        </p>
       )}
       {selectedCard && (
         <CardDetails
