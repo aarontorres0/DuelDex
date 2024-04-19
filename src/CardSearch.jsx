@@ -1,6 +1,6 @@
 import React from "react";
 
-function CardSearch({ searchText, onSearchTextChange }) {
+const CardSearch = ({ onSearchTextChange, placeholder, searchText }) => {
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       onSearchTextChange(event.target.value);
@@ -11,7 +11,7 @@ function CardSearch({ searchText, onSearchTextChange }) {
     <div className="flex justify-center my-4">
       <input
         type="search"
-        placeholder="Search cards..."
+        placeholder={placeholder}
         value={searchText}
         onChange={(e) => onSearchTextChange(e.target.value)}
         onKeyDown={handleKeyDown}
@@ -25,6 +25,6 @@ function CardSearch({ searchText, onSearchTextChange }) {
       </button>
     </div>
   );
-}
+};
 
 export default CardSearch;

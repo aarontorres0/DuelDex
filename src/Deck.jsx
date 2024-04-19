@@ -4,7 +4,7 @@ import CardDetails from "./CardDetails";
 import CardSearch from "./CardSearch";
 import { supabase } from "./supabaseClient";
 
-function Deck() {
+const Deck = () => {
   const { user } = useAuth();
   const [cards, setCards] = useState([]);
   const [filteredCards, setFilteredCards] = useState([]);
@@ -79,6 +79,7 @@ function Deck() {
       <CardSearch
         searchText={searchText}
         onSearchTextChange={handleSearchTextChange}
+        placeholder="Search cards in deck"
       />
       {isLoading ? (
         <div className="flex justify-center items-center">
@@ -104,8 +105,9 @@ function Deck() {
         </div>
       ) : (
         <p className="text-center">
-          No cards in your deck match your search or you do not have any cards
-          in your deck.
+          {cards.length
+            ? "No cards in deck match your search."
+            : "You do not have any cards in your deck."}
         </p>
       )}
       {selectedCard && (
@@ -119,6 +121,6 @@ function Deck() {
       )}
     </div>
   );
-}
+};
 
 export default Deck;

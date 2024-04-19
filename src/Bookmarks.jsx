@@ -4,7 +4,7 @@ import CardDetails from "./CardDetails";
 import CardSearch from "./CardSearch";
 import { supabase } from "./supabaseClient";
 
-function Bookmarks() {
+const Bookmarks = () => {
   const { user } = useAuth();
   const [cards, setCards] = useState([]);
   const [filteredCards, setFilteredCards] = useState([]);
@@ -81,6 +81,7 @@ function Bookmarks() {
       <CardSearch
         searchText={searchText}
         onSearchTextChange={handleSearchTextChange}
+        placeholder="Search bookmarked cards"
       />
       {isLoading ? (
         <div className="flex justify-center items-center">
@@ -106,10 +107,12 @@ function Bookmarks() {
         </div>
       ) : (
         <p className="text-center">
-          No bookmarked cards match your search or you do not have any
-          bookmarked cards.
+          {cards.length
+            ? "No bookmarked cards match your search."
+            : "You do not have any bookmarked cards."}
         </p>
       )}
+
       {selectedCard && (
         <CardDetails
           card={selectedCard}
@@ -121,6 +124,6 @@ function Bookmarks() {
       )}
     </div>
   );
-}
+};
 
 export default Bookmarks;
