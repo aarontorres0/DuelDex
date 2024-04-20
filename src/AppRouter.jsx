@@ -6,10 +6,11 @@ import Bookmarks from "./Bookmarks";
 import Deck from "./Deck";
 import Login from "./Login";
 import LogoutButton from "./LogoutButton";
+import Settings from "./Settings";
 import Signup from "./Signup";
 import "./index.css";
 
-function AppRouter() {
+const AppRouter = () => {
   const { user, setUser } = useAuth();
   const [showMenu, setShowMenu] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
@@ -53,23 +54,30 @@ function AppRouter() {
                   <Link
                     to="/"
                     className="block px-4 py-2 text-sm text-success-700 hover:bg-gray-100"
-                    onClick={() => setShowMenu(false)}
+                    onClick={closeMenu}
                   >
                     Home
                   </Link>
                   <Link
                     to="/bookmarks"
                     className="block px-4 py-2 text-sm text-success-700 hover:bg-gray-100"
-                    onClick={() => setShowMenu(false)}
+                    onClick={closeMenu}
                   >
                     Bookmarks
                   </Link>
                   <Link
                     to="/deck"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    onClick={() => setShowMenu(false)}
+                    onClick={closeMenu}
                   >
                     Deck
+                  </Link>
+                  <Link
+                    to="/settings"
+                    className="block px-4 py-2 text-sm text-primary-700 hover:bg-gray-100"
+                    onClick={closeMenu}
+                  >
+                    Settings
                   </Link>
                   <div className="px-4 py-2">
                     <LogoutButton closeMenu={closeMenu} />
@@ -80,7 +88,7 @@ function AppRouter() {
                   <button
                     onClick={() => {
                       setShowLogin(true);
-                      setShowMenu(false);
+                      closeMenu();
                     }}
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
@@ -89,7 +97,7 @@ function AppRouter() {
                   <button
                     onClick={() => {
                       setShowSignup(true);
-                      setShowMenu(false);
+                      closeMenu();
                     }}
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
@@ -108,6 +116,9 @@ function AppRouter() {
               </Link>
               <Link to="/deck" className="btn btn-info text-white">
                 Deck
+              </Link>
+              <Link to="/settings" className="btn btn-primary text-white">
+                Settings
               </Link>
               <LogoutButton />
             </>
@@ -146,9 +157,10 @@ function AppRouter() {
         <Route path="/" element={<App />} />
         <Route path="/bookmarks" element={<Bookmarks />} />
         <Route path="/deck" element={<Deck />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </Router>
   );
-}
+};
 
 export default AppRouter;
