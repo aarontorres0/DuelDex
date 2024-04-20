@@ -100,7 +100,8 @@ const Deck = () => {
       )}
       {isLoading ? (
         <div className="flex justify-center items-center">
-          <div className="loader"></div>
+          <div className="loading loading-spinner loading-md text-info"></div>
+          <p className="ml-2">Loading cards...</p>
         </div>
       ) : filteredCards.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">

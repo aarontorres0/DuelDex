@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
 
-function Login({ setUser, onClose, onSwitchToSignup }) {
+const Login = ({ onClose, onSwitchToSignup, setUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
@@ -67,7 +67,7 @@ function Login({ setUser, onClose, onSwitchToSignup }) {
           />
           <p className="my-4">
             Don't have an account?{" "}
-            <span className="link" onClick={onSwitchToSignup}>
+            <span className="link link-primary" onClick={onSwitchToSignup}>
               Sign Up
             </span>
           </p>
@@ -88,6 +88,6 @@ function Login({ setUser, onClose, onSwitchToSignup }) {
       </div>
     </div>
   );
-}
+};
 
 export default Login;

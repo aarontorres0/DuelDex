@@ -100,11 +100,13 @@ const App = () => {
           {searchFeedback}
         </p>
       )}
-      {feedbackMessage && <div className="text-center m-4">{feedbackMessage}</div>}
+      {feedbackMessage && (
+        <div className="text-center m-4">{feedbackMessage}</div>
+      )}
       {isLoading ? (
         <div className="flex justify-center items-center">
-          <div className="loader"></div>
-          <p>Loading cards...</p>
+          <div className="loading loading-spinner loading-md text-info"></div>
+          <p className="ml-2">Loading cards...</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
