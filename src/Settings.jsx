@@ -9,6 +9,8 @@ const Settings = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loadingNewEmail, setLoadingNewEmail] = useState(false);
+  const [loadingNewPassword, setLoadingNewPassword] = useState(false);
 
   const isValidPassword = (password) => {
     return (
@@ -37,6 +39,7 @@ const Settings = () => {
       return;
     }
 
+    setLoadingNewEmail(true);
     setMessage("");
 
     const { error } = await supabase.auth.updateUser({
@@ -44,13 +47,14 @@ const Settings = () => {
     });
 
     if (error) {
-      setMessage("Failed to update email: " + error.message);
+      setMessage("Failed to update email.");
     } else {
       setMessage(
         "Please check your email to confirm the email address change."
       );
-      setNewEmail("");
     }
+    setNewEmail("");
+    setLoadingNewEmail(false);
   };
 
   const changePassword = async () => {
@@ -68,6 +72,8 @@ const Settings = () => {
       return;
     }
 
+    setLoadingNewPassword(true);
+
     // Re-authenticate user with old password to confirm identity
     const { error: reauthError } = await supabase.auth.signInWithPassword({
       email: currentEmail,
@@ -76,6 +82,7 @@ const Settings = () => {
 
     if (reauthError) {
       setMessage("Failed to verify current password. Please try again.");
+      setLoadingNewPassword(false);
       return;
     }
 
@@ -84,12 +91,14 @@ const Settings = () => {
       password: newPassword,
     });
     if (updateError) {
-      setMessage("Failed to update password: " + updateError.message);
+      setMessage("Failed to update password.");
     } else {
       setMessage("Password updated successfully!");
       setCurrentPassword("");
       setNewPassword("");
     }
+
+    setLoadingNewPassword(false);
   };
 
   return (
@@ -108,9 +117,13 @@ const Settings = () => {
         <button
           className="btn btn-primary m-2"
           onClick={updateEmail}
-          disabled={!newEmail}
+          disabled={!newEmail || loadingNewEmail}
         >
-          Update Email
+          {loadingNewEmail ? (
+            <span className="loading loading-spinner loading-xs"></span>
+          ) : (
+            "Update Email"
+          )}
         </button>
       </div>
       <div className="text-xs text-gray-500 m-2">
@@ -135,9 +148,13 @@ const Settings = () => {
         <button
           className="btn btn-warning text-white m-2"
           onClick={changePassword}
-          disabled={!currentPassword || !newPassword}
+          disabled={!currentPassword || !newPassword || loadingNewPassword}
         >
-          Change Password
+          {loadingNewPassword ? (
+            <span className="loading loading-spinner loading-xs"></span>
+          ) : (
+            "Change Password"
+          )}
         </button>
       </div>
       <div className="text-xs text-gray-500 m-2">
