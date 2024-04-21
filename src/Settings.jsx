@@ -9,8 +9,11 @@ const Settings = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [alertType, setAlertType] = useState("info");
   const [loadingNewEmail, setLoadingNewEmail] = useState(false);
   const [loadingNewPassword, setLoadingNewPassword] = useState(false);
+  const [loadingDeleteBookmarks, setLoadingDeleteBookmarks] = useState(false);
+  const [loadingDeleteDeck, setLoadingDeleteDeck] = useState(false);
 
   const isValidPassword = (password) => {
     return (
@@ -29,12 +32,14 @@ const Settings = () => {
   const updateEmail = async () => {
     if (currentEmail === newEmail) {
       setMessage("Please enter a new email.");
+      setAlertType("alert-warning");
       setNewEmail("");
       return;
     }
 
     if (!isValidEmail(newEmail)) {
       setMessage("Please enter a valid email address.");
+      setAlertType("alert-error");
       setNewEmail("");
       return;
     }
@@ -47,11 +52,13 @@ const Settings = () => {
     });
 
     if (error) {
-      setMessage("Failed to update email.");
+      setMessage("Failed to update email. Please try again.");
+      setAlertType("alert-error");
     } else {
       setMessage(
         "Please check your email to confirm the email address change."
       );
+      setAlertType("alert-success");
     }
     setNewEmail("");
     setLoadingNewEmail(false);
@@ -59,15 +66,15 @@ const Settings = () => {
 
   const changePassword = async () => {
     if (currentPassword === newPassword) {
-      setMessage("Please enter a new password.");
+      setMessage("Please enter a different password than your current one.");
+      setAlertType("alert-warning");
       setNewPassword("");
       return;
     }
 
     if (!isValidPassword(newPassword)) {
-      setMessage(
-        "Password must be at least 16 characters and include at least one lowercase, one uppercase, one number, and one special character."
-      );
+      setMessage("Password must meet the required standards.");
+      setAlertType("alert-error");
       setNewPassword("");
       return;
     }
@@ -82,6 +89,7 @@ const Settings = () => {
 
     if (reauthError) {
       setMessage("Failed to verify current password. Please try again.");
+      setAlertType("alert-error");
       setLoadingNewPassword(false);
       return;
     }
@@ -91,9 +99,11 @@ const Settings = () => {
       password: newPassword,
     });
     if (updateError) {
-      setMessage("Failed to update password.");
+      setMessage("Failed to update password. Please try again.");
+      setAlertType("alert-error");
     } else {
       setMessage("Password updated successfully!");
+      setAlertType("alert-success");
       setCurrentPassword("");
       setNewPassword("");
     }
@@ -101,9 +111,44 @@ const Settings = () => {
     setLoadingNewPassword(false);
   };
 
+  const clearUserData = async (tableName) => {
+    if (tableName === "bookmarks") {
+      setLoadingDeleteBookmarks(true);
+    } else {
+      setLoadingDeleteDeck(true);
+    }
+
+    const { error } = await supabase
+      .from(tableName)
+      .delete()
+      .eq("user_id", user.id);
+
+    if (error) {
+      setMessage(`Failed to clear cards from ${tableName}. Please try again.`);
+      setAlertType("alert-error");
+    } else {
+      setMessage(`All cards cleared from ${tableName} successfully.`);
+      setAlertType("alert-success");
+    }
+
+    if (tableName === "bookmarks") {
+      setLoadingDeleteBookmarks(false);
+    } else {
+      setLoadingDeleteDeck(false);
+    }
+    
+  };
+
   return (
     <div className="container mx-auto p-4">
-      {message && <div className="flex alert justify-center">{message}</div>}
+      {message && (
+        <div
+          role="alert"
+          className={`flex alert ${alertType} text-white justify-center`}
+        >
+          {message}
+        </div>
+      )}
       <div>
         <h2 className="font-semibold m-2">Update Email</h2>
         <input
@@ -161,6 +206,31 @@ const Settings = () => {
         Password must be at least 16 characters long and include at least one
         uppercase letter, one lowercase letter, one number, and one of the
         following special characters: !@#$%^&*()_+-=[]{};\'\:"|?,./`~
+      </div>
+      <div>
+        <h2 className="font-semibold m-2">Clear Cards</h2>
+        <button
+          className={"btn btn-error text-white m-2"}
+          onClick={() => clearUserData("bookmarks")}
+          disabled={loadingDeleteBookmarks}
+        >
+          {loadingDeleteBookmarks ? (
+            <span className="loading loading-spinner loading-xs"></span>
+          ) : (
+            "Clear Bookmarks"
+          )}
+        </button>
+        <button
+          className={"btn btn-error text-white m-2"}
+          onClick={() => clearUserData("deck")}
+          disabled={loadingDeleteDeck}
+        >
+          {loadingDeleteDeck ? (
+            <span className="loading loading-spinner loading-xs"></span>
+          ) : (
+            "Clear Deck"
+          )}
+        </button>
       </div>
     </div>
   );
