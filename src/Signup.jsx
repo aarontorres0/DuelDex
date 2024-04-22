@@ -130,9 +130,13 @@ const Signup = ({ onClose, onSwitchToLogin }) => {
             <button
               type="submit"
               disabled={!email || !password || !confirmPassword || loading}
-              className={`btn ${loading ? "loading" : "btn-info text-white"}`}
+              className={"btn btn-info text-white"}
             >
-              Sign Up
+              {loading ? (
+                <span className="loading loading-spinner loading-xs"></span>
+              ) : (
+                "Sign Up"
+              )}
             </button>
             <button onClick={onClose} className="btn btn-error text-white">
               Close
