@@ -12,6 +12,8 @@ const CardDetails = ({
 }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isInDeck, setIsInDeck] = useState(false);
+  const [loadingBookmark, setLoadingBookmark] = useState(true);
+  const [loadingDeck, setLoadingDeck] = useState(true);
 
   const descriptionLines = card.desc
     ? card.desc.split("●").filter((line) => line.trim() !== "")
@@ -33,17 +35,20 @@ const CardDetails = ({
   const checkBookmarkStatus = async () => {
     if (!user) return;
 
+    setLoadingBookmark(true);
     const { data } = await supabase
       .from("bookmarks")
       .select("*")
       .eq("user_id", user.id)
       .eq("card_id", card.id);
     setIsBookmarked(data.length > 0);
+    setLoadingBookmark(false);
   };
 
   const toggleBookmark = async () => {
     if (!user) return;
 
+    setLoadingBookmark(true);
     if (isBookmarked) {
       const { error } = await supabase
         .from("bookmarks")
@@ -70,22 +75,26 @@ const CardDetails = ({
         console.error("Error adding bookmark:", error);
       }
     }
+    setLoadingBookmark(false);
   };
 
   const checkDeckStatus = async () => {
     if (!user) return;
 
+    setLoadingDeck(true);
     const { data } = await supabase
       .from("deck")
       .select("*")
       .eq("user_id", user.id)
       .eq("card_id", card.id);
     setIsInDeck(data.length > 0);
+    setLoadingDeck(false);
   };
 
   const toggleDeck = async () => {
     if (!user) return;
 
+    setLoadingDeck(true);
     if (isInDeck) {
       const { error } = await supabase
         .from("deck")
@@ -112,6 +121,7 @@ const CardDetails = ({
         console.error("Error adding card to deck:", error);
       }
     }
+    setLoadingDeck(false);
   };
 
   return (
@@ -186,17 +196,37 @@ const CardDetails = ({
                     ? "btn-outline btn-primary text-white"
                     : "btn-primary"
                 } my-2`}
+                disabled={loadingBookmark}
                 onClick={toggleBookmark}
               >
-                {isBookmarked ? "Remove Bookmark" : "Bookmark"}
+                {loadingBookmark ? (
+                  <>
+                    <span className="loading loading-spinner loading-xs"></span>
+                    loading
+                  </>
+                ) : isBookmarked ? (
+                  "Remove Bookmark"
+                ) : (
+                  "Bookmark"
+                )}
               </button>
               <button
                 className={`btn ${
                   isInDeck ? "btn-outline btn-info" : "btn-info text-white"
                 } my-2`}
+                disabled={loadingDeck}
                 onClick={toggleDeck}
               >
-                {isInDeck ? "Remove from Deck" : "Add to Deck"}
+                {loadingDeck ? (
+                  <>
+                    <span className="loading loading-spinner loading-xs"></span>
+                    loading
+                  </>
+                ) : isInDeck ? (
+                  "Remove from Deck"
+                ) : (
+                  "Add to Deck"
+                )}
               </button>
             </>
           )}
