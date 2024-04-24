@@ -23,6 +23,7 @@
 - **Frontend:** React.js with Vite
 - **Styling:** Tailwind CSS and DaisyUI
 - **API:** YGOPRODeck API
+- **Authentication and Database:** Supabase
 
 ## Acknowledgments
 
