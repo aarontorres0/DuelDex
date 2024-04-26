@@ -15,9 +15,7 @@ const CardDetails = ({
   const [loadingBookmark, setLoadingBookmark] = useState(true);
   const [loadingDeck, setLoadingDeck] = useState(true);
 
-  const descriptionLines = card.desc
-    ? card.desc.split("●").filter((line) => line.trim() !== "")
-    : [];
+  const descriptionLines = card.desc ? card.desc.split("●") : [];
 
   useEffect(() => {
     checkBookmarkStatus();
@@ -180,7 +178,9 @@ const CardDetails = ({
               <div className="py-2">
                 <strong>Description:</strong>
                 {descriptionLines.map((line, index) => (
-                  <p key={index}>{index > 0 ? "● " + line : line}</p>
+                  <span key={index}>
+                    {index === 0 ? ` ${line}` : <p>{"●" + line}</p>}
+                  </span>
                 ))}
               </div>
             )}
