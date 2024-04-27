@@ -14,6 +14,8 @@ const Settings = () => {
   const [loadingNewPassword, setLoadingNewPassword] = useState(false);
   const [loadingDeleteBookmarks, setLoadingDeleteBookmarks] = useState(false);
   const [loadingDeleteDeck, setLoadingDeleteDeck] = useState(false);
+  const [clearBookmarks, setClearBookmarks] = useState("");
+  const [clearDeck, setClearDeck] = useState("");
 
   const isValidPassword = (password) => {
     return (
@@ -114,8 +116,10 @@ const Settings = () => {
   const clearUserData = async (tableName) => {
     if (tableName === "bookmarks") {
       setLoadingDeleteBookmarks(true);
+      setClearBookmarks("");
     } else {
       setLoadingDeleteDeck(true);
+      setClearDeck("");
     }
 
     const { error } = await supabase
@@ -136,7 +140,6 @@ const Settings = () => {
     } else {
       setLoadingDeleteDeck(false);
     }
-    
   };
 
   return (
@@ -208,11 +211,24 @@ const Settings = () => {
         following special characters: !@#$%^&*()_+-=[]{};\'\:"|?,./`~
       </div>
       <div>
-        <h2 className="font-semibold m-2">Clear Cards</h2>
+        <h2 className="font-semibold m-2">Clear Bookmarks</h2>
+        <p className="text-xs text-gray-500 m-2">
+          Please type <strong>bookmarks</strong> below to confirm you would like
+          to clear your bookmarks. This action cannot be undone.
+        </p>
+        <input
+          type="text"
+          placeholder="Type confirmation here"
+          className="input input-bordered w-full max-w-xs m-2"
+          value={clearBookmarks}
+          required
+          onChange={(e) => setClearBookmarks(e.target.value)}
+          disabled={loadingDeleteBookmarks}
+        />
         <button
           className={"btn btn-error text-white m-2"}
           onClick={() => clearUserData("bookmarks")}
-          disabled={loadingDeleteBookmarks}
+          disabled={clearBookmarks !== "bookmarks" || loadingDeleteBookmarks}
         >
           {loadingDeleteBookmarks ? (
             <span className="loading loading-spinner loading-xs"></span>
@@ -220,10 +236,26 @@ const Settings = () => {
             "Clear Bookmarks"
           )}
         </button>
+      </div>
+      <div>
+        <h2 className="font-semibold m-2">Clear Deck</h2>
+        <p className="text-xs text-gray-500 m-2">
+          Please type <strong>deck</strong> below to confirm you would like to
+          clear your deck. This action cannot be undone.
+        </p>
+        <input
+          type="text"
+          placeholder="Type confirmation here"
+          className="input input-bordered w-full max-w-xs m-2"
+          value={clearDeck}
+          required
+          onChange={(e) => setClearDeck(e.target.value)}
+          disabled={loadingDeleteDeck}
+        />
         <button
           className={"btn btn-error text-white m-2"}
           onClick={() => clearUserData("deck")}
-          disabled={loadingDeleteDeck}
+          disabled={clearDeck !== "deck" || loadingDeleteDeck}
         >
           {loadingDeleteDeck ? (
             <span className="loading loading-spinner loading-xs"></span>
