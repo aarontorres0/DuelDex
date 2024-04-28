@@ -17,7 +17,8 @@ const App = () => {
   };
 
   const searchCards = async () => {
-    if (!searchQuery) {
+    const trimmedQuery = searchQuery.trim();
+    if (!trimmedQuery) {
       setFeedbackMessage("");
       return;
     }
@@ -25,7 +26,7 @@ const App = () => {
     try {
       const response = await fetch(
         `https://db.ygoprodeck.com/api/v7/cardinfo.php?fname=${encodeURIComponent(
-          searchQuery
+          trimmedQuery
         )}`
       );
       const data = await response.json();
