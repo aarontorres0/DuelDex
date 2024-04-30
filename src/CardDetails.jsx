@@ -159,6 +159,11 @@ const CardDetails = ({
                 <strong>Level:</strong> {card.level}
               </p>
             )}
+            {card.linkval && (
+              <p className="py-2">
+                <strong>Link Value:</strong> {card.linkval}
+              </p>
+            )}
             {typeof card.atk !== "undefined" && (
               <p className="py-2">
                 <strong>Attack:</strong> {card.atk}
