@@ -210,6 +210,7 @@ const Settings = () => {
         uppercase letter, one lowercase letter, one number, and one of the
         following special characters: !@#$%^&*()_+-=[]{};\'\:"|?,./`~
       </div>
+      <hr className="my-8" />
       <div>
         <h2 className="font-semibold m-2">Clear Bookmarks</h2>
         <p className="text-xs text-gray-500 m-2">
