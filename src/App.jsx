@@ -59,6 +59,7 @@ const App = () => {
   };
 
   const fetchRandomCards = async () => {
+    setSearchQuery("");
     setFeedbackMessage("");
     setSearchFeedback("");
     setIsLoading(true);
