@@ -59,6 +59,8 @@ const App = () => {
   };
 
   const fetchRandomCards = async () => {
+    setFeedbackMessage("");
+    setSearchFeedback("");
     setIsLoading(true);
     let fetchedCards = [];
     for (let i = 0; i < 8; i++) {
@@ -73,7 +75,6 @@ const App = () => {
       }
     }
     setCards(fetchedCards);
-    setFeedbackMessage("");
     setIsLoading(false);
   };
 
